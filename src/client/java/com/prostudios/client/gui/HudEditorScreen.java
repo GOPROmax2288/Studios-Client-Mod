@@ -69,7 +69,10 @@ public class HudEditorScreen extends Screen {
 	}
 
 	@Override
-	public boolean mouseClicked(double mouseX, double mouseY, int button) {
+	public boolean mouseClicked(net.minecraft.client.input.MouseButtonEvent event, boolean doubled) {
+		double mouseX = event.x();
+		double mouseY = event.y();
+		int button = event.button();
 		if (button == 0) {
 			if (doneButton != null && doneButton.contains(mouseX, mouseY)) {
 				onClose();
@@ -90,11 +93,14 @@ public class HudEditorScreen extends Screen {
 				}
 			}
 		}
-		return super.mouseClicked(mouseX, mouseY, button);
+		return super.mouseClicked(event, doubled);
 	}
 
 	@Override
-	public boolean mouseDragged(double mouseX, double mouseY, int button, double dx, double dy) {
+	public boolean mouseDragged(net.minecraft.client.input.MouseButtonEvent event, double dx, double dy) {
+		double mouseX = event.x();
+		double mouseY = event.y();
+		int button = event.button();
 		if (dragging != null && button == 0) {
 			ModuleDef def = dragging.def();
 			StudiosClientClient.CONFIG.setPos(def.id(),
@@ -102,17 +108,17 @@ public class HudEditorScreen extends Screen {
 					(int) Math.max(0, Math.min(height - 20, mouseY - dragOffY)));
 			return true;
 		}
-		return super.mouseDragged(mouseX, mouseY, button, dx, dy);
+		return super.mouseDragged(event, dx, dy);
 	}
 
 	@Override
-	public boolean mouseReleased(double mouseX, double mouseY, int button) {
-		if (dragging != null && button == 0) {
+	public boolean mouseReleased(net.minecraft.client.input.MouseButtonEvent event) {
+		if (dragging != null && event.button() == 0) {
 			dragging = null;
 			StudiosClientClient.saveConfig();
 			return true;
 		}
-		return super.mouseReleased(mouseX, mouseY, button);
+		return super.mouseReleased(event);
 	}
 
 	@Override

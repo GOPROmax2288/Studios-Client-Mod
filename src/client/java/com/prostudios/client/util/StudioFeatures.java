@@ -3,15 +3,21 @@ package com.prostudios.client.util;
 import com.prostudios.client.StudiosClientClient;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.OptionInstance;
+import net.minecraft.server.level.ParticleStatus;
 
 /**
- * Handles the two "stateful" modules: zoom (smooth FOV interpolation while C is held)
- * and fullbright (gamma override via OptionInstance value set, bypassing validation).
+ * Handles the "stateful" modules: zoom (smooth FOV interpolation while C is held),
+ * fullbright (gamma override), low particle density and the sky fog tweak
+ * (implemented by the FogRendererMixin, which reads {@link #fogTweakEnabled}).
  */
 public final class StudioFeatures {
 	private static float zoomCurrent = 1.0f;
-	private static Double savedFov = null;
+	private static Integer savedFov = null;
 	private static Double prevGamma = null;
+	private static ParticleStatus prevParticles = null;
+
+	/** Read by FogRendererMixin every frame; flipped by {@link #applyFogTweak}. */
+	public static volatile boolean fogTweakEnabled = false;
 
 	private StudioFeatures() {}
 
@@ -29,11 +35,11 @@ public final class StudioFeatures {
 		if (Math.abs(zoomCurrent - target) < 0.002f) zoomCurrent = target;
 
 		if (savedFov != null) {
-			OptionInstance<Double> fov = mc.options.fov();
+			OptionInstance<Integer> fov = mc.options.fov();
 			if (zoomCurrent <= 0.999f) {
-				setOption(fov, Math.max(savedFov * zoomCurrent, 5.0));
+				fov.set(Math.max((int) Math.floor(savedFov * zoomCurrent), 5));
 			} else {
-				setOption(fov, savedFov);
+				fov.set(savedFov);
 				savedFov = null;
 			}
 		}
@@ -41,7 +47,7 @@ public final class StudioFeatures {
 
 	private static void releaseZoom(Minecraft mc) {
 		if (savedFov != null) {
-			setOption(mc.options.fov(), savedFov);
+			mc.options.fov().set(savedFov);
 			savedFov = null;
 		}
 		zoomCurrent = 1.0f;
@@ -51,15 +57,25 @@ public final class StudioFeatures {
 		OptionInstance<Double> gamma = mc.options.gamma();
 		if (on) {
 			if (prevGamma == null) prevGamma = gamma.get();
-			setOption(gamma, 16.0);
+			gamma.set(16.0);
 		} else if (prevGamma != null) {
-			setOption(gamma, prevGamma);
+			gamma.set(prevGamma);
 			prevGamma = null;
 		}
 	}
 
-	@SuppressWarnings("unchecked")
-	private static <T> void setOption(OptionInstance<T> option, T value) {
-		((com.prostudios.client.mixin.OptionInstanceAccessor<T>) option).studios$setValue(value);
+	public static void applyParticles(Minecraft mc, boolean on) {
+		OptionInstance<ParticleStatus> particles = mc.options.particles();
+		if (on) {
+			if (prevParticles == null) prevParticles = particles.get();
+			particles.set(ParticleStatus.DECREASED);
+		} else if (prevParticles != null) {
+			particles.set(prevParticles);
+			prevParticles = null;
+		}
+	}
+
+	public static void applyFogTweak(Minecraft mc, boolean on) {
+		fogTweakEnabled = on;
 	}
 }

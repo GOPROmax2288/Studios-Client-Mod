@@ -105,12 +105,12 @@ public final class HudOverlay {
 
 		int baseX = p[0] + gap;
 		int baseY = p[1] + gap;
-		key(g, font, mc.options.keyUp().isDown(), "W", baseX + k + gap, baseY, k);
-		key(g, font, mc.options.keyLeft().isDown(), "A", baseX, baseY + k + gap, k);
-		key(g, font, mc.options.keyDown().isDown(), "S", baseX + k + gap, baseY + k + gap, k);
-		key(g, font, mc.options.keyRight().isDown(), "D", baseX + (k + gap) * 2, baseY + k + gap, k);
+		key(g, font, mc.options.keyUp.isDown(), "W", baseX + k + gap, baseY, k);
+		key(g, font, mc.options.keyLeft.isDown(), "A", baseX, baseY + k + gap, k);
+		key(g, font, mc.options.keyDown.isDown(), "S", baseX + k + gap, baseY + k + gap, k);
+		key(g, font, mc.options.keyRight.isDown(), "D", baseX + (k + gap) * 2, baseY + k + gap, k);
 		// mouse buttons
-		long win = mc.getWindow().getWindow();
+		long win = mc.getWindow().handle();
 		keyWide(g, font, GLFW.glfwGetMouseButton(win, 0) == GLFW.GLFW_PRESS, "LMB", baseX, baseY + (k + gap) * 2, k * 2 + gap, k);
 		keyWide(g, font, GLFW.glfwGetMouseButton(win, 1) == GLFW.GLFW_PRESS, "RMB", baseX + (k + gap) * 2, baseY + (k + gap) * 2, k, k);
 	}

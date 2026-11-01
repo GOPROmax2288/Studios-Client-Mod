@@ -11,7 +11,7 @@ import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.fabricmc.fabric.api.client.rendering.v1.hud.HudElementRegistry;
 import net.minecraft.client.KeyMapping;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import org.lwjgl.glfw.GLFW;
 
 public class StudiosClientClient implements ClientModInitializer {
@@ -35,16 +35,18 @@ public class StudiosClientClient implements ClientModInitializer {
 	public void onInitializeClient() {
 		CONFIG = ClientConfig.load();
 
+		net.minecraft.client.KeyMapping.Category studiosCategory = new KeyMapping.Category(
+				Identifier.fromNamespaceAndPath(MOD_ID, "keys"));
 		openMenuKey = KeyBindingHelper.registerKeyBinding(new KeyMapping(
 				"key.studios_client.open_menu",
 				InputConstants.Type.KEYSYM,
 				GLFW.GLFW_KEY_RIGHT_SHIFT,
-				"key.categories.studios_client"));
+				studiosCategory));
 		zoomKey = KeyBindingHelper.registerKeyBinding(new KeyMapping(
 				"key.studios_client.zoom",
 				InputConstants.Type.KEYSYM,
 				GLFW.GLFW_KEY_C,
-				"key.categories.studios_client"));
+				studiosCategory));
 
 		ClientTickEvents.END_CLIENT_TICK.register(mc -> {
 			while (openMenuKey.consumeClick()) {
@@ -54,10 +56,12 @@ public class StudiosClientClient implements ClientModInitializer {
 			if (!appliedStartupFeatures) {
 				appliedStartupFeatures = true;
 				StudioFeatures.applyFullbright(mc, CONFIG.isEnabled("fullbright"));
+				StudioFeatures.applyParticles(mc, CONFIG.isEnabled("particles"));
+				StudioFeatures.applyFogTweak(mc, CONFIG.isEnabled("sky_fog"));
 			}
 		});
 
-		HudElementRegistry.addLast(ResourceLocation.fromNamespaceAndPath(MOD_ID, "main_hud"),
+		HudElementRegistry.addLast(Identifier.fromNamespaceAndPath(MOD_ID, "main_hud"),
 				(gg, tickCounter) -> com.prostudios.client.hud.HudOverlay.render(gg));
 	}
 

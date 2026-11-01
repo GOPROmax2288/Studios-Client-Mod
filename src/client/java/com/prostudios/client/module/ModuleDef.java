@@ -8,6 +8,8 @@ public record ModuleDef(String id, String name) {
 	public static final ModuleDef PING = new ModuleDef("ping", "Ping Display");
 	public static final ModuleDef ZOOM = new ModuleDef("zoom", "Zoom (hold C)");
 	public static final ModuleDef FULLBRIGHT = new ModuleDef("fullbright", "Fullbright");
+	public static final ModuleDef PARTICLES = new ModuleDef("particles", "Low Particle Density");
+	public static final ModuleDef SKY_FOG = new ModuleDef("sky_fog", "Sky Fog Tweak");
 
-	public static final ModuleDef[] ALL = {FPS, CPS, KEYSTROKES, COORDS, PING, ZOOM, FULLBRIGHT};
+	public static final ModuleDef[] ALL = {FPS, CPS, KEYSTROKES, COORDS, PING, ZOOM, FULLBRIGHT, PARTICLES, SKY_FOG};
 }

@@ -53,12 +53,12 @@ public class StudiosMenuScreen extends Screen {
 		// backdrop
 		g.fill(0, 0, sw, height, 0xE60B1120);
 		// header wordmark
-		g.pose().pushPose();
-		g.pose().scale(3.0f, 3.0f, 1.0f);
+		g.pose().pushMatrix();
+		g.pose().scale(3.0f, 3.0f);
 		String word = "STUDIOS";
 		int wordW = font.width(word) * 3;
 		g.drawString(font, word, (sw - wordW) / 2 / 3, 14, StudiosClientClient.AMBER, true);
-		g.pose().popPose();
+		g.pose().popMatrix();
 		g.drawCenteredString(font, "C L I E N T   C O R E", sw / 2, 48, StudiosClientClient.WHITE);
 		g.fill(sw / 2 - 60, 62, sw / 2 + 60, 63, StudiosClientClient.AMBER_DIM);
 
@@ -110,7 +110,10 @@ public class StudiosMenuScreen extends Screen {
 	}
 
 	@Override
-	public boolean mouseClicked(double mouseX, double mouseY, int button) {
+	public boolean mouseClicked(net.minecraft.client.input.MouseButtonEvent event, boolean doubled) {
+		double mouseX = event.x();
+		double mouseY = event.y();
+		int button = event.button();
 		if (button == 0) {
 			for (int i = 0; i < cardRects.size() && i < ModuleDef.ALL.length; i++) {
 				if (cardRects.get(i).contains(mouseX, mouseY)) {
@@ -119,6 +122,10 @@ public class StudiosMenuScreen extends Screen {
 					StudiosClientClient.CONFIG.setEnabled(def.id(), now);
 					if (def == ModuleDef.FULLBRIGHT) {
 						StudioFeatures.applyFullbright(Minecraft.getInstance(), now);
+					} else if (def == ModuleDef.PARTICLES) {
+						StudioFeatures.applyParticles(Minecraft.getInstance(), now);
+					} else if (def == ModuleDef.SKY_FOG) {
+						StudioFeatures.applyFogTweak(Minecraft.getInstance(), now);
 					}
 					return true;
 				}
@@ -132,7 +139,7 @@ public class StudiosMenuScreen extends Screen {
 				return true;
 			}
 		}
-		return super.mouseClicked(mouseX, mouseY, button);
+		return super.mouseClicked(event, doubled);
 	}
 
 	@Override
