@@ -20,6 +20,8 @@ The in-game mod menu and client HUD suite for **PRO STUDIOS** — a Fabric clien
 | Ping Display | Your latency to the server |
 | Zoom | Hold **C** for smooth Lunar/OptiFine-style zoom (strength configurable in config) |
 | Fullbright | Gamma boost, toggled from the menu |
+| Low Particle Density | Sets the vanilla particle option to "Decreased" while enabled |
+| Sky Fog Tweak | Pushes distance fog start/end out so distant terrain stays visible (mixin on the vanilla fog renderer) |
 
 Toggle state, HUD positions and zoom strength all persist in `config/studios-client.json` (Gson).
 
@@ -29,6 +31,11 @@ Toggle state, HUD positions and zoom strength all persist in `config/studios-cli
 2. Download the latest jar from [Releases](https://github.com/GOPROmax2288/Studios-Client-Mod/releases) or CI artifacts.
 3. Drop it in your `.minecraft/mods` folder alongside [Fabric API](https://modrinth.com/mod/fabric-api).
 4. In game: **Right Shift** opens the menu, **C** zooms.
+
+## Compatibility
+
+- **Sodium is NOT bundled** with this mod. The STUDIOS Client launcher already ships Sodium; this mod works fine alongside it and does not duplicate it. If you install it on a plain vanilla Fabric profile, install Sodium yourself if you want it.
+- Requires [Fabric API](https://modrinth.com/mod/fabric-api).
 
 ## Building
 
@@ -50,3 +57,7 @@ The jar lands in `build/libs/`. Every push builds automatically via GitHub Actio
 ## License
 
 MIT
+
+## Credits
+
+Built by PRO STUDIOS (GOPROmax2288). Fabric/Loader/Loom, Fabric API, ModMenu (compile-only integration) by their respective authors.
