@@ -1,0 +1,15 @@
+{
+	"required": true,
+	"package": "com.prostudios.client.mixin",
+	"compatibilityLevel": "JAVA_21",
+	"client": [
+		"MouseMixin",
+		"SimpleOptionAccessor"
+	],
+	"injectors": {
+		"defaultRequire": 1
+	},
+	"overwrites": {
+		"requireAnnotations": true
+	}
+}

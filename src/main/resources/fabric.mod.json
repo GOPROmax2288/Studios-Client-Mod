@@ -1,0 +1,37 @@
+{
+	"schemaVersion": 1,
+	"id": "studios-client",
+	"version": "${version}",
+	"name": "STUDIOS Client Core",
+	"description": "The in-game mod menu and client HUD suite for PRO STUDIOS: FPS, CPS, keystrokes, coordinates, ping, zoom and fullbright.",
+	"authors": [
+		"PRO STUDIOS"
+	],
+	"contact": {
+		"homepage": "https://github.com/GOPROmax2288/Studios-Client-Mod",
+		"sources": "https://github.com/GOPROmax2288/Studios-Client-Mod"
+	},
+	"license": "MIT",
+	"icon": "assets/studios-client/icon.png",
+	"environment": "client",
+	"entrypoints": {
+		"client": [
+			"com.prostudios.client.StudiosClientClient"
+		],
+		"modmenu": [
+			"com.prostudios.client.integration.ModMenuIntegration"
+		]
+	},
+	"mixins": [
+		{
+			"config": "studios-client.client.mixins.json",
+			"environment": "client"
+		}
+	],
+	"depends": {
+		"fabricloader": ">=0.20.1",
+		"minecraft": "~1.21.11",
+		"java": ">=21",
+		"fabric-api": "*"
+	}
+}
